@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Be my valentine!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: #f6dedf;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .valentine-card {
+            position: relative;
+            width: 700px;
+            height: 630px;
+            background: #fff6f3;
+            border-radius: 60px;
+            box-shadow: 0 16px 54px 0 #ae447044;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow: visible;
+            padding-bottom: 60px;
+        }
+        .hearts-area {
+            position: absolute;
+            left: 0; right: 0;
+            top: 50px; bottom: 200px;
+            pointer-events: none;
+            z-index: 4;
+            width: 100%;
+            height: 320px;
+        }
+
+        .main-img-container {
+            margin-top: 62px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        .main-img {
+            width: 340px;
+            max-height: 350px;
+            object-fit: cover;
+            border-radius: 14px;
+            box-shadow: 0 6px 34px #eeaabc65;
+            background: #fff;
+            z-index: 2;
+            position: relative;
+        }
+        .falling-heart {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            font-size: 2.1em;
+            pointer-events: none;
+            opacity: 0.89;
+            z-index: 4;
+            animation: fall 3.6s linear forwards;
+            filter: drop-shadow(0 2px 8px #ea568455);
+        }
+        @keyframes fall {
+            0%   { opacity: 0.89; }
+            80%  { opacity: 1; }
+            100% {
+                top: 320px;
+                opacity: 0.07;
+                transform: rotateZ(380deg) scale(0.97);
+            }
+        }
+        #timer {
+            margin-top: 58px;
+            margin-bottom: 34px;
+            font-family: 'Comfortaa', Arial, sans-serif;
+            color: #b34866;
+            font-size: 2.1em;
+            font-weight: 600;
+            text-align: center;
+            width: 95%;
+            z-index: 6;
+            background: none;
+            line-height: 1.1;
+            letter-spacing: 0.01em;
+        }
+        #timer b {
+            color: #ee6688;
+            font-size: 1.08em;
+        }
+
+        .valentine-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        .valentine-btn {
+            font-family: 'Comfortaa', Arial, sans-serif;
+            font-size: 1.3em;
+            font-weight: 800;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 38px;
+            cursor: pointer;
+            transition: 0.18s;
+            box-shadow: 0 2px 10px #eeaadc18;
+        }
+        .valentine-btn.si {
+            background: #fd6eab;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+        .valentine-btn.si:hover {
+            background: #ec348c;
+            transform: scale(1.08);
+        }
+        .valentine-btn.no {
+            background: #fff;
+            color: #fd6eab;
+            border: 2.2px solid #fd6eab;
+        }
+        .valentine-btn.no:hover {
+            background: #fde2ee;
+            color: #c22965;
+            transform: scale(1.08) rotate(-2deg);
+        }
+        @media (max-width: 800px) {
+            .valentine-card {width: 98vw; min-width: 0; border-radius: 24px; height: 90vw;}
+            .main-img { width: 220px; }
+            #timer { font-size: 1.1em;}
+        }
+    </style>
+</head>
+<body>
+<div class="valentine-card">
+    <div class="hearts-area"></div>
+    <div class="main-img-container">
+        <img class="main-img" src="invitation.jpg" alt="Be my Valentine"/>
+    </div>
+    <div id="timer"></div>
+    <div class="valentine-buttons">
+        <button class="valentine-btn si" onclick="answerSi()">Si 💖</button>
+        <button class="valentine-btn no" onclick="answerNo()">No 💔</button>
+    </div>
+</div>
+
+<script>
+    const startDate = new Date('2023-04-04T00:00:00');
+
+    function diffYMDHMS(startDate, endDate) {
+        let years = endDate.getFullYear() - startDate.getFullYear();
+        let months = endDate.getMonth() - startDate.getMonth();
+        let days = endDate.getDate() - startDate.getDate();
+        let hours = endDate.getHours() - startDate.getHours();
+        let minutes = endDate.getMinutes() - startDate.getMinutes();
+        let seconds = endDate.getSeconds() - startDate.getSeconds();
+
+        if (seconds < 0) {
+            seconds += 60;
+            minutes--;
+        }
+        if (minutes < 0) {
+            minutes += 60;
+            hours--;
+        }
+        if (hours < 0) {
+            hours += 24;
+            days--;
+        }
+        if (days < 0) {
+            let prevMonth = new Date(endDate.getFullYear(), endDate.getMonth(), 0);
+            days += prevMonth.getDate();
+            months--;
+        }
+        if (months < 0) {
+            months += 12;
+            years--;
+        }
+        return { years, months, days, hours, minutes, seconds };
+    }
+
+    function updateTimer() {
+        const now = new Date();
+        const t = diffYMDHMS(startDate, now);
+        document.getElementById('timer').innerHTML =
+            `Mi amor por ti comenzó hace...<br>
+        <b>${t.years}</b> años <b>${t.months}</b> meses <b>${t.days}</b> días <b>${t.hours}</b> horas <b>${t.minutes}</b> minutos <b>${t.seconds}</b> segundos`;
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    // Сердечки только по блоку с картинкой
+    function createHeart() {
+        const area = document.querySelector('.hearts-area');
+        const heart = document.createElement('div');
+        heart.className = 'falling-heart';
+        heart.innerHTML = '💗';
+        heart.style.left = (Math.random() * 77 + 10) + '%';
+        heart.style.fontSize = (1.25 + Math.random() * 1.6) + 'em';
+        heart.style.transform = `rotate(${Math.random()*360}deg)`;
+        area.appendChild(heart);
+        setTimeout(() => heart.remove(), 3700);
+    }
+    setInterval(createHeart, 750);
+
+    // Клик-обработчики
+    function answerSi() {
+        alert("Gracias, mi amorcito! ¿Te gustaría acompañarme a Arte Luna Artesanal el 14 de febrero?");
+        window.open("https://maps.app.goo.gl/uy1x8FGgfabRERXF6?g_st=aw", "_blank");
+    }
+
+    function answerNo() {
+        alert("Ohh... 😔 ¿Segura? ¡Piénsalo otra vez!");
+        // тут тоже можно добавить свою реакцию
+    }
+</script>
+</body>
+</html>
